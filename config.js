@@ -6,8 +6,8 @@
 // public; row-level security in schema.sql is what actually protects the data.
 // Never put the `service_role` key here.
 
-export const SUPABASE_URL = 'https://YOUR-PROJECT-REF.supabase.co';
-export const SUPABASE_ANON_KEY = 'YOUR-ANON-KEY';
+export const SUPABASE_URL = 'https://sxoqtrphoyjmgsyftbfj.supabase.co';
+export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4b3F0cnBob3lqbWdzeWZ0YmZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxODg0MzEsImV4cCI6MjEwMzc2NDQzMX0.BBLudDQj9ganowlKc11TjVPqgfCkLYF4J3mtJPNSVnk';
 
 // Board columns. Change these freely; `id` is what gets stored in the database,
 // so if you rename an id, existing cards in that column need updating too.

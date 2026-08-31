@@ -30,8 +30,11 @@ as $$
   );
 $$;
 
-revoke execute on function public.is_member() from public, anon;
-grant execute on function public.is_member() to authenticated;
+-- anon gets execute too, so signed-out requests return an empty result
+-- instead of a confusing "permission denied". The function takes no
+-- arguments and only reports on the caller's own token, so it leaks nothing.
+revoke execute on function public.is_member() from public;
+grant execute on function public.is_member() to anon, authenticated;
 
 -- ----------------------------------------------------------------- cards --
 
