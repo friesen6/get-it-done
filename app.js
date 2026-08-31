@@ -293,8 +293,11 @@ $('auth-form').addEventListener('submit', async (e) => {
   button.disabled = false;
   if (!error) return;                      // onAuthStateChange opens the board
 
+  // Only invalid_credentials means a bad code. Anything else (unconfirmed
+  // account, disabled provider, network) gets reported as-is — showing
+  // "wrong code" for those sends you hunting for the wrong problem.
   msg.className = 'auth-msg error';
-  msg.textContent = error.status === 400
+  msg.textContent = error.code === 'invalid_credentials'
     ? "That code didn't work."
     : error.message;
   $('code').select();
