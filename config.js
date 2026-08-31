@@ -13,10 +13,10 @@ export const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 // the team code; nobody types this address. Create the account once in the
 // Supabase dashboard (Authentication -> Users -> Add user), and keep public
 // signups DISABLED so this stays the only way in.
-export const TEAM_ACCOUNT = 'team@getitdone.team';
+export const TEAM_ACCOUNT = 'victor.friesen6@gmail.com';
 
 // Board columns. Change these freely; `id` is what gets stored in the database,
-// so if you rename an id, existing cards in that column need updating too.
+//team so if you rename an id, existing cards in that column need updating too.
 export const COLUMNS = [
   { id: 'todo',        name: 'To Do' },
   { id: 'in_progress', name: 'In Progress' },
