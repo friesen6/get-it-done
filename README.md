@@ -104,6 +104,9 @@ code.
 - The free Supabase tier pauses projects after a week of no activity. A daily
   standup habit is enough to keep it awake; otherwise you unpause it from the
   dashboard.
+- The board follows your system light/dark setting by default. The toggle in
+  the top bar pins a mode, remembered per browser in `localStorage`. Cards are
+  pink in light mode; dark mode is unchanged.
 - Columns are defined in `config.js`. Renaming a column's `id` orphans existing
   cards in it, so update their `status` in the Table Editor if you do.
 - Cards are ordered by a fractional `position`, so moving one card only writes

@@ -305,6 +305,40 @@ $('auth-form').addEventListener('submit', async (e) => {
 
 $('lock').addEventListener('click', () => db.auth.signOut());
 
+/* ----------------------------------------------------------------- theme */
+
+// No stored choice means "follow the system", which is the default.
+// Clicking the toggle pins a mode until it's clicked again.
+const THEME_KEY = 'gid-theme';
+const systemDark = matchMedia('(prefers-color-scheme: dark)');
+
+function storedTheme() {
+  try { return localStorage.getItem(THEME_KEY); } catch { return null; }
+}
+
+function activeTheme() {
+  return storedTheme() ?? (systemDark.matches ? 'dark' : 'light');
+}
+
+function paintThemeButton() {
+  const dark = activeTheme() === 'dark';
+  $('theme').textContent = dark ? '\u2600' : '\u263E';
+  $('theme').title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+}
+
+$('theme').addEventListener('click', () => {
+  const next = activeTheme() === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem(THEME_KEY, next); } catch { /* nothing to do */ }
+  paintThemeButton();
+});
+
+systemDark.addEventListener('change', () => {
+  if (!storedTheme()) paintThemeButton();
+});
+
+paintThemeButton();
+
 /* ----------------------------------------------------------------- utils */
 
 function el(tag, className, content) {

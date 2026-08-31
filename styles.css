@@ -10,21 +10,57 @@
   --danger: #c0392b;
   --shadow: 0 1px 2px rgba(16, 20, 30, .08), 0 4px 12px rgba(16, 20, 30, .06);
   --radius: 10px;
+
+  /* Cards are pink in light mode only; the dark palette below keeps them
+     on the neutral surface colour. --card-dim is warmed to stay legible
+     against pink rather than reusing the grey --text-dim. */
+  --card-bg: #ffdfeb;
+  --card-border: #f2b8d0;
+  --card-dim: #6f4d5c;
+  --card-chip: #ffc9dd;
 }
 
+/* Follow the system unless the toggle has pinned light. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #14161a;
-    --surface: #1e2126;
-    --surface-2: #22262c;
-    --border: #333941;
-    --text: #e8eaed;
-    --text-dim: #949ca8;
-    --accent: #6b8dff;
-    --accent-text: #0e1014;
-    --danger: #e06a5c;
-    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 12px rgba(0, 0, 0, .25);
+  :root:not([data-theme="light"]) {
+  --bg: #14161a;
+  --surface: #1e2126;
+  --surface-2: #22262c;
+  --border: #333941;
+  --text: #e8eaed;
+  --text-dim: #949ca8;
+  --accent: #6b8dff;
+  --accent-text: #0e1014;
+  --danger: #e06a5c;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 12px rgba(0, 0, 0, .25);
+
+  /* unchanged from before: cards sit on the plain surface colour */
+  --card-bg: #1e2126;
+  --card-border: #333941;
+  --card-dim: #949ca8;
+  --card-chip: #22262c;
   }
+}
+
+/* The toggle pinning dark has to win even on a light system, and a media
+   query can't share a rule with a plain selector, so the palette repeats. */
+:root[data-theme="dark"] {
+  --bg: #14161a;
+  --surface: #1e2126;
+  --surface-2: #22262c;
+  --border: #333941;
+  --text: #e8eaed;
+  --text-dim: #949ca8;
+  --accent: #6b8dff;
+  --accent-text: #0e1014;
+  --danger: #e06a5c;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 12px rgba(0, 0, 0, .25);
+
+  /* unchanged from before: cards sit on the plain surface colour */
+  --card-bg: #1e2126;
+  --card-border: #333941;
+  --card-dim: #949ca8;
+  --card-chip: #22262c;
 }
 
 * { box-sizing: border-box; }
@@ -122,8 +158,8 @@ body {
 .column.drag-over { outline: 2px dashed var(--accent); outline-offset: -4px; }
 
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 8px;
   padding: 10px 12px;
   box-shadow: var(--shadow);
@@ -139,7 +175,7 @@ body {
 .card.dragging { opacity: .4; }
 .card-title { font-weight: 500; overflow-wrap: anywhere; }
 .card-notes {
-  color: var(--text-dim);
+  color: var(--card-dim);
   font-size: 13px;
   margin-top: 4px;
   display: -webkit-box;
@@ -154,12 +190,12 @@ body {
   gap: 6px;
   margin-top: 8px;
   font-size: 12px;
-  color: var(--text-dim);
+  color: var(--card-dim);
 }
 
 .assignee {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
+  background: var(--card-chip);
+  border: 1px solid var(--card-border);
   border-radius: 20px;
   padding: 1px 8px;
 }
@@ -171,9 +207,9 @@ body {
 }
 
 .nudge button {
-  border: 1px solid var(--border);
+  border: 1px solid var(--card-border);
   background: var(--surface);
-  color: var(--text-dim);
+  color: var(--card-dim);
   border-radius: 5px;
   width: 22px;
   height: 20px;
@@ -208,6 +244,12 @@ body {
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
+}
+
+.btn-icon {
+  padding: 6px 9px;
+  line-height: 1;
+  font-size: 14px;
 }
 
 .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 500; }
