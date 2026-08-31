@@ -13,8 +13,7 @@
       <h1>Get It Done</h1>
       <div class="topbar-right">
         <span id="presence" class="presence" title="People with the board open"></span>
-        <span id="who" class="who"></span>
-        <button id="signout" class="btn btn-quiet">Sign out</button>
+        <button id="lock" class="btn btn-quiet">Lock</button>
       </div>
     </header>
     <main id="board" class="board"></main>
@@ -23,10 +22,10 @@
   <div id="auth" class="auth" hidden>
     <form id="auth-form" class="auth-card">
       <h1>Get It Done</h1>
-      <p class="muted">Sign in with your email. We'll send you a one-time link &mdash; no password to remember.</p>
-      <label for="email">Email</label>
-      <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
-      <button type="submit" class="btn btn-primary">Send me a link</button>
+      <p class="muted">Enter the team code to open the board.</p>
+      <label for="code">Team code</label>
+      <input id="code" type="password" autocomplete="current-password" required autofocus>
+      <button type="submit" class="btn btn-primary">Unlock</button>
       <p id="auth-msg" class="auth-msg" role="status"></p>
     </form>
   </div>

@@ -29,8 +29,9 @@ let lastId = null;
 export function createClient() {
   return {
     auth: {
-      getSession: () => ok({ session: { user: { email: 'you@example.com' } } }),
+      getSession: () => ok({ session: { user: {} } }),
       onAuthStateChange: () => {},
+      signInWithPassword: () => ok({ user: {} }),
       signOut: () => ok(null),
     },
     from: () => table(),

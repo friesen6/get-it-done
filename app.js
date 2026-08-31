@@ -1,5 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { SUPABASE_URL, SUPABASE_ANON_KEY, COLUMNS } from './config.js';
+import { SUPABASE_URL, SUPABASE_ANON_KEY, TEAM_ACCOUNT, COLUMNS } from './config.js';
 
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -7,32 +7,35 @@ const $ = (id) => document.getElementById(id);
 const GAP = 1000;
 
 let cards = [];          // local mirror of the `cards` table
-let me = null;           // the signed-in user
+let unlocked = false;
 let dragId = null;
+
+// Everyone shares one account, so identity can't come from the session.
+// A per-tab id is enough to count who else has the board open.
+const tabId = crypto.randomUUID();
 
 /* ------------------------------------------------------------------ boot */
 
 async function boot() {
   const { data: { session } } = await db.auth.getSession();
   $('boot').hidden = true;
-  session ? await startBoard(session.user) : showAuth();
+  session ? await startBoard() : showAuth();
 
-  db.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && !me) startBoard(session.user);
+  db.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_IN' && !unlocked) startBoard();
     if (event === 'SIGNED_OUT') location.reload();
   });
 }
 
 function showAuth() {
   $('auth').hidden = false;
-  $('email').focus();
+  $('code').focus();
 }
 
-async function startBoard(user) {
-  me = user;
+async function startBoard() {
+  unlocked = true;
   $('auth').hidden = true;
   $('app').hidden = false;
-  $('who').textContent = user.email;
 
   const { data, error } = await db
     .from('cards')
@@ -40,11 +43,9 @@ async function startBoard(user) {
     .order('position', { ascending: true });
 
   if (error) {
-    // Almost always means this email isn't in `allowed_emails` yet.
-    document.body.innerHTML =
-      '<div class="boot">Signed in as ' + user.email +
-      ', but this account has no access to the board.<br>' +
-      'Ask whoever set it up to add your email, then reload.</div>';
+    const notice = el('div', 'boot',
+      'Unlocked, but the board could not be loaded: ' + error.message);
+    document.body.replaceChildren(notice);
     return;
   }
 
@@ -65,18 +66,16 @@ function listen() {
     render();
   });
 
-  // Lightweight "who else has this open" indicator.
+  // Lightweight "who else has this open" indicator. One shared account means
+  // we can only count tabs, not name people.
   channel.on('presence', { event: 'sync' }, () => {
-    const others = new Set();
-    for (const entries of Object.values(channel.presenceState())) {
-      for (const e of entries) if (e.email && e.email !== me.email) others.add(e.email);
-    }
-    $('presence').textContent = others.size ? `${others.size} other${others.size > 1 ? 's' : ''} viewing` : '';
-    $('presence').title = [...others].join(', ');
+    const total = Object.values(channel.presenceState()).flat().length;
+    const others = Math.max(0, total - 1);
+    $('presence').textContent = others ? `${others} other${others > 1 ? 's' : ''} viewing` : '';
   });
 
   channel.subscribe((status) => {
-    if (status === 'SUBSCRIBED') channel.track({ email: me.email });
+    if (status === 'SUBSCRIBED') channel.track({ tab: tabId });
   });
 }
 
@@ -282,23 +281,26 @@ $('auth-form').addEventListener('submit', async (e) => {
   const button = e.target.querySelector('button');
   button.disabled = true;
   msg.className = 'auth-msg';
-  msg.textContent = 'Sending…';
+  msg.textContent = 'Checking…';
 
-  const { error } = await db.auth.signInWithOtp({
-    email: $('email').value.trim(),
-    options: { emailRedirectTo: location.href.split('#')[0] },
+  // Postgres checks the code against its stored hash. A wrong code never
+  // gets a session, and the right one is never present in this page.
+  const { error } = await db.auth.signInWithPassword({
+    email: TEAM_ACCOUNT,
+    password: $('code').value,
   });
 
   button.disabled = false;
-  if (error) {
-    msg.className = 'auth-msg error';
-    msg.textContent = error.message;
-  } else {
-    msg.textContent = 'Check your email for the sign-in link.';
-  }
+  if (!error) return;                      // onAuthStateChange opens the board
+
+  msg.className = 'auth-msg error';
+  msg.textContent = error.status === 400
+    ? "That code didn't work."
+    : error.message;
+  $('code').select();
 });
 
-$('signout').addEventListener('click', () => db.auth.signOut());
+$('lock').addEventListener('click', () => db.auth.signOut());
 
 /* ----------------------------------------------------------------- utils */
 

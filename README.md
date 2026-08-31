@@ -19,10 +19,21 @@ dev-preview.html + dev-mock.js
 ## How it hangs together
 
 GitHub Pages can only serve static files, so the board itself lives in
-Supabase: a `cards` table, plus an `allowed_emails` table that decides who is
-allowed to touch it. Sign-in is a one-time email link — no passwords stored
-anywhere. Postgres row-level security enforces access on the server, so it does
-not matter that the page and the anon key are public.
+Supabase, in a `cards` table.
+
+Access is one shared team code. Everyone signs in as the same account, so
+there are no per-person invites and no emails are ever sent. The code is a
+Supabase account password: stored hashed, checked by Postgres, and never
+present in the page. A wrong code gets no session, and without a session
+row-level security refuses every read and write — so it does not matter that
+the page and the anon key are public.
+
+The one thing holding this up is that **public signups must stay disabled** in
+the Supabase dashboard. If anyone can register an account, they get a valid
+session and walk straight past the code.
+
+The tradeoff of a shared account: the board cannot tell who did what. The
+`assignee` field is free text, which is usually enough for a small team.
 
 Changes broadcast over Supabase Realtime, so a card someone drags moves on
 everyone else's screen a moment later.
@@ -33,8 +44,14 @@ everyone else's screen a moment later.
 
 - Sign up at <https://supabase.com> and create a project (free tier is plenty).
 - Open the **SQL Editor**, paste in all of `schema.sql`, and run it.
-- Open the **Table Editor** → `allowed_emails` and insert one row per person,
-  including yourself. Anyone not listed here can sign in but will see nothing.
+- **Authentication → Users → Add user**: email `team@getitdone.team` (or
+  whatever you set as `TEAM_ACCOUNT` in `config.js`), password = the team code
+  you'll share. Tick **Auto Confirm User**. Nobody types this address; the app
+  supplies it and only asks for the code.
+- **Authentication → Sign In / Providers → Email**: turn **off** new user
+  signups. This is not optional — see above.
+- Pick a long code. It is the only thing standing between the internet and
+  your board, so favour a passphrase over a short word.
 
 **2. Point the app at it**
 
@@ -75,8 +92,15 @@ To work on the UI without a Supabase project at all, open
 <http://localhost:8000/dev-preview.html>: it swaps in `dev-mock.js` via an
 import map and runs the real `app.js` against fake data.
 
+## Changing the code
+
+Authentication → Users → the team account → reset its password. Everyone's
+existing sessions keep working until they sign out; new unlocks need the new
+code.
+
 ## Notes
 
+- No email is ever sent, so Supabase's email rate limits don't apply.
 - The free Supabase tier pauses projects after a week of no activity. A daily
   standup habit is enough to keep it awake; otherwise you unpause it from the
   dashboard.
