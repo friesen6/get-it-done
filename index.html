@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Get It Done</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" hidden>
+    <header class="topbar">
+      <h1>Get It Done</h1>
+      <div class="topbar-right">
+        <span id="presence" class="presence" title="People with the board open"></span>
+        <span id="who" class="who"></span>
+        <button id="signout" class="btn btn-quiet">Sign out</button>
+      </div>
+    </header>
+    <main id="board" class="board"></main>
+  </div>
+
+  <div id="auth" class="auth" hidden>
+    <form id="auth-form" class="auth-card">
+      <h1>Get It Done</h1>
+      <p class="muted">Sign in with your email. We'll send you a one-time link &mdash; no password to remember.</p>
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+      <button type="submit" class="btn btn-primary">Send me a link</button>
+      <p id="auth-msg" class="auth-msg" role="status"></p>
+    </form>
+  </div>
+
+  <div id="boot" class="boot">Loading&hellip;</div>
+
+  <dialog id="editor">
+    <form method="dialog" id="editor-form">
+      <label for="card-title">Title</label>
+      <input id="card-title" required maxlength="200">
+
+      <label for="card-notes">Notes</label>
+      <textarea id="card-notes" rows="5" maxlength="4000"></textarea>
+
+      <label for="card-assignee">Assigned to</label>
+      <input id="card-assignee" maxlength="120" placeholder="Nobody yet">
+
+      <div class="editor-actions">
+        <button value="delete" id="card-delete" class="btn btn-danger" formnovalidate>Delete</button>
+        <span class="spacer"></span>
+        <button value="cancel" class="btn btn-quiet" formnovalidate>Cancel</button>
+        <button value="save" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
