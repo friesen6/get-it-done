@@ -20,6 +20,6 @@ export const TEAM_ACCOUNT = 'victor.friesen6@gmail.com';
 export const COLUMNS = [
   { id: 'todo',        name: 'To Do' },
   { id: 'in_progress', name: 'In Progress' },
-  { id: 'blocked',     name: 'Blocked' },
+  { id: 'blocked',     name: 'Blocked / Needs Review' },
   { id: 'done',        name: 'Done' },
 ];
