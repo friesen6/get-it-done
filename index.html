@@ -29,6 +29,15 @@
         <button id="lock" class="btn btn-quiet">Lock</button>
       </div>
     </header>
+    <div class="filters">
+      <select id="filter-person" class="filter-select"></select>
+      <div class="filter-dates" role="group" aria-label="Filter by date added">
+        <button type="button" data-range="all" class="is-active">All</button>
+        <button type="button" data-range="today">Today</button>
+        <button type="button" data-range="week">This week</button>
+        <button type="button" data-range="month">This month</button>
+      </div>
+    </div>
     <main id="board" class="board"></main>
   </div>
   </div>

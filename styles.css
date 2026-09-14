@@ -148,6 +148,50 @@ body {
 .who { color: var(--text-dim); font-size: 13px; }
 .presence { color: var(--text-dim); font-size: 13px; }
 
+/* ---- filters ---- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-select {
+  font: inherit;
+  font-size: 13px;
+  border-radius: 7px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.filter-dates {
+  display: flex;
+  gap: 2px;
+}
+
+.filter-dates button {
+  font: inherit;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.filter-dates button:first-child { border-radius: 7px 0 0 7px; }
+.filter-dates button:last-child { border-radius: 0 7px 7px 0; }
+.filter-dates button + button { border-left: none; }
+
+.filter-dates button:hover { color: var(--text); }
+.filter-dates button.is-active { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+
 /* ---- board ---- */
 
 .board {

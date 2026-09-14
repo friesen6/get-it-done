@@ -86,15 +86,63 @@ function upsertLocal(row) {
 
 /* ---------------------------------------------------------------- render */
 
+let filterPerson = '';   // '' means everyone
+let filterRange = 'all'; // 'all' | 'today' | 'week' | 'month', keyed off created_at
+
+function matchesRange(iso, range) {
+  if (range === 'all') return true;
+  const created = new Date(iso);
+  const now = new Date();
+  if (range === 'today') return created.toDateString() === now.toDateString();
+  const days = range === 'week' ? 7 : 30;
+  return now.getTime() - created.getTime() <= days * 24 * 60 * 60 * 1000;
+}
+
+const passesFilters = (c) =>
+  (!filterPerson || c.assignee === filterPerson) && matchesRange(c.created_at, filterRange);
+
 const inColumn = (columnId) =>
-  cards.filter((c) => c.status === columnId).sort((a, b) => a.position - b.position);
+  cards.filter((c) => c.status === columnId && passesFilters(c)).sort((a, b) => a.position - b.position);
 
 function render() {
+  renderFilters();
   const board = $('board');
   const focused = document.activeElement?.dataset?.id;
   board.replaceChildren(...COLUMNS.map(renderColumn));
   if (focused) board.querySelector(`[data-id="${focused}"]`)?.focus();
 }
+
+/** Keep the person dropdown in sync with who's actually assigned right now. */
+function renderFilters() {
+  const select = $('filter-person');
+  const people = [...new Set(cards.map((c) => c.assignee).filter(Boolean))].sort();
+
+  if (filterPerson && !people.includes(filterPerson)) filterPerson = '';
+
+  select.replaceChildren(option('', 'Everyone'), ...people.map((p) => option(p, p)));
+  select.value = filterPerson;
+}
+
+function option(value, label) {
+  const node = document.createElement('option');
+  node.value = value;
+  node.textContent = label;
+  return node;
+}
+
+$('filter-person').addEventListener('change', () => {
+  filterPerson = $('filter-person').value;
+  render();
+});
+
+document.querySelectorAll('.filter-dates button').forEach((button) => {
+  button.addEventListener('click', () => {
+    filterRange = button.dataset.range;
+    document.querySelectorAll('.filter-dates button')
+      .forEach((b) => b.classList.toggle('is-active', b === button));
+    render();
+  });
+});
 
 function renderColumn(col) {
   const list = inColumn(col.id);

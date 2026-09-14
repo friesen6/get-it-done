@@ -15,15 +15,31 @@
 </head>
 <body>
   <div id="app" hidden>
-    <header class="topbar">
-      <h1>Get It Done</h1>
-      <div class="topbar-right">
-        <span id="presence" class="presence" title="People with the board open"></span>
-        <button id="theme" class="btn btn-quiet btn-icon"></button>
-        <button id="lock" class="btn btn-quiet">Lock</button>
+    <nav class="side-bar">
+      <button class="tab is-active" data-tab="board"><span>Board</span></button>
+      <button class="tab" data-tab="notes"><span>Notes</span></button>
+      <button class="tab" data-tab="settings"><span>Settings</span></button>
+    </nav>
+    <div class="app-main">
+      <header class="topbar">
+        <h1>Get It Done</h1>
+        <div class="topbar-right">
+          <span id="presence" class="presence" title="People with the board open"></span>
+          <button id="theme" class="btn btn-quiet btn-icon"></button>
+          <button id="lock" class="btn btn-quiet">Lock</button>
+        </div>
+      </header>
+      <div class="filters">
+        <select id="filter-person" class="filter-select"></select>
+        <div class="filter-dates" role="group" aria-label="Filter by date added">
+          <button type="button" data-range="all" class="is-active">All</button>
+          <button type="button" data-range="today">Today</button>
+          <button type="button" data-range="week">This week</button>
+          <button type="button" data-range="month">This month</button>
+        </div>
       </div>
-    </header>
-    <main id="board" class="board"></main>
+      <main id="board" class="board"></main>
+    </div>
   </div>
 
   <div id="auth" class="auth" hidden>
