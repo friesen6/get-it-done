@@ -15,6 +15,12 @@
 </head>
 <body>
   <div id="app" hidden>
+    <nav class="side-bar">
+       <button class="tab is-active" data-tab="board"><span>Board</span></button>
+      <button class="tab" data-tab="notes"><span>Notes</span></button>
+      <button class="tab" data-tab="settings"><span>Settings</span></button>
+    </nav>
+  <div class="app-main" >
     <header class="topbar">
       <h1>Get It Done</h1>
       <div class="topbar-right">
@@ -25,7 +31,7 @@
     </header>
     <main id="board" class="board"></main>
   </div>
-
+  </div>
   <div id="auth" class="auth" hidden>
     <form id="auth-form" class="auth-card">
       <h1>Get It Done</h1>

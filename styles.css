@@ -68,6 +68,7 @@
 /* `display` rules below would otherwise beat the UA stylesheet's [hidden]. */
 [hidden] { display: none !important; }
 
+
 body {
   margin: 0;
   background: var(--bg);
@@ -83,6 +84,51 @@ body {
   color: var(--text-dim);
 }
 
+
+#app {
+  display: flex;   /* lay children out in a row */
+  min-height: 100vh;
+}
+
+
+.app-main {
+  flex: 1;                 /* take up remaining space */
+  min-width: 0;             /* allow children to shrink */
+}
+
+.side-bar {
+  display: flex;
+  flex: 0;
+  flex-direction:column;
+  align-items: left;
+  gap: 4px;
+  padding: 12px 8px;
+  border: 1px solid var(--border);
+  background: var(--surface)
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 3px;
+  width: 72px;
+  padding: 10px 4px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-dim);
+  font: inherit;      
+  cursor: pointer;
+}
+
+.tab span { font-size: 11px; }  /* the small text label under the icon */
+
+.tab:hover { background: var(--surface-2); color: var(--text); }
+
+.tab.is-active {
+  background: var(--surface-2);
+  color: var(--accent);
+}
 /* ---- top bar ---- */
 
 .topbar {
@@ -182,6 +228,14 @@ body {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.card-dates {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--card-dim);
 }
 
 .card-foot {

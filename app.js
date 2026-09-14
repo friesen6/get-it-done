@@ -135,6 +135,11 @@ function renderCard(card, col) {
   node.append(el('div', 'card-title', card.title));
   if (card.notes) node.append(el('div', 'card-notes', card.notes));
 
+  node.append(el('div', 'card-dates', [
+    el('span', null, `Added ${formatDate(card.created_at)}`),
+    el('span', null, `Updated ${formatDate(card.updated_at)}`),
+  ]));
+
   const foot = el('div', 'card-foot');
   if (card.assignee) foot.append(el('span', 'assignee', card.assignee));
 
@@ -341,6 +346,10 @@ paintThemeButton();
 
 /* ----------------------------------------------------------------- utils */
 
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
 function el(tag, className, content) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -348,5 +357,22 @@ function el(tag, className, content) {
   else if (content != null) node.textContent = content;   // textContent: never HTML
   return node;
 }
+
+// --- Tabbar ---
+// Grab every element with class "tab" (a list of the three buttons).
+const tabs = document.querySelectorAll('.tab');
+
+tabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    // Remove the highlight from whichever tab currently has it...
+    tabs.forEach((t) => t.classList.remove('is-active'));
+    // ...and put it on the one that was clicked.
+    tab.classList.add('is-active');
+
+    // Which tab is this? Read the data-tab we set in the HTML.
+    const which = tab.dataset.tab;   // "board", "notes", or "settings"
+    console.log('Switched to tab:', which);
+  });
+});
 
 boot();

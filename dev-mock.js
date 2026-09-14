@@ -1,10 +1,10 @@
 // Throwaway stand-in for the Supabase client, used only by _test.html.
 let seq = 0;
 const rows = [
-  { id: 'a', title: 'Write the schema', notes: 'RLS on every table', assignee: 'vic', status: 'todo', position: 1000 },
-  { id: 'b', title: 'Pick a hosting plan', notes: null, assignee: null, status: 'todo', position: 2000 },
-  { id: 'c', title: 'Drag and drop', notes: 'HTML5 DnD + arrow buttons', assignee: 'sam', status: 'in_progress', position: 1000 },
-  { id: 'd', title: 'Decide on auth', notes: null, assignee: null, status: 'done', position: 1000 },
+  { id: 'a', title: 'Write the schema', notes: 'RLS on every table', assignee: 'vic', status: 'todo', position: 1000, created_at: '2026-09-08T10:00:00Z', updated_at: '2026-09-08T10:00:00Z' },
+  { id: 'b', title: 'Pick a hosting plan', notes: null, assignee: null, status: 'todo', position: 2000, created_at: '2026-09-09T14:30:00Z', updated_at: '2026-09-09T14:30:00Z' },
+  { id: 'c', title: 'Drag and drop', notes: 'HTML5 DnD + arrow buttons', assignee: 'sam', status: 'in_progress', position: 1000, created_at: '2026-09-10T09:15:00Z', updated_at: '2026-09-12T16:45:00Z' },
+  { id: 'd', title: 'Decide on auth', notes: null, assignee: null, status: 'done', position: 1000, created_at: '2026-09-05T08:00:00Z', updated_at: '2026-09-13T11:20:00Z' },
 ];
 
 const ok = (data) => Promise.resolve({ data, error: null });
