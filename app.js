@@ -406,21 +406,4 @@ function el(tag, className, content) {
   return node;
 }
 
-// --- Tabbar ---
-// Grab every element with class "tab" (a list of the three buttons).
-const tabs = document.querySelectorAll('.tab');
-
-tabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    // Remove the highlight from whichever tab currently has it...
-    tabs.forEach((t) => t.classList.remove('is-active'));
-    // ...and put it on the one that was clicked.
-    tab.classList.add('is-active');
-
-    // Which tab is this? Read the data-tab we set in the HTML.
-    const which = tab.dataset.tab;   // "board", "notes", or "settings"
-    console.log('Switched to tab:', which);
-  });
-});
-
 boot();
